@@ -1,0 +1,83 @@
+#! /usr/bin/php
+<?php
+
+require '../common.php';
+
+use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
+use Doctrine\Migrations\Configuration\Configuration;
+use Doctrine\Migrations\Tools\Console\Command\DumpSchemaCommand;
+use Doctrine\Migrations\Tools\Console\Command\ExecuteCommand;
+use Doctrine\Migrations\Tools\Console\Command\LatestCommand;
+use Doctrine\Migrations\Tools\Console\Command\MigrateCommand;
+use Doctrine\Migrations\Tools\Console\Command\RollupCommand;
+use Doctrine\Migrations\Tools\Console\Command\StatusCommand;
+use Doctrine\Migrations\Tools\Console\Command\VersionCommand;
+use Doctrine\Migrations\Tools\Console\Helper\ConfigurationHelper;
+use Library\Extend\Migration\GenerateCommand;
+use Library\Extend\Migration\GenerateModelCommand;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\QuestionHelper;
+
+define('MIGRATION_FILE_DIR', joinPaths(APPLICATION_PATH, '/database/migrations'));
+define('MIGRATION_FILE_TEMPLATE_DIR',
+    joinPaths(APPLICATION_PATH, '/application/library/Extend/Migration/Template'));
+define('MIGRATION_TABLE_NAME', 'migration_version');
+define('MIGRATION_NAMESPACE', 'Database\Migrations');
+
+$dbConfig = [
+    'driver' => 'pdo_mysql',
+    'host' => MYSQL_HOST,
+    'dbname' => MYSQL_DATABASE,
+    'user' => MYSQL_USERNAME,
+    'password' => MYSQL_PASSWORD,
+    'charset' => 'UTF8',
+];
+
+if (!file_exists(MIGRATION_FILE_DIR)) {
+    if (!mkdir(MIGRATION_FILE_DIR, 0755, true)) {
+        echo '迁移文件目录生成失败';
+        die();
+    }
+}
+
+try {
+    $connection = DriverManager::getConnection($dbConfig);
+} catch (Exception $exception)  {
+    echo '初始化连接失败:' . $exception->getMessage();
+    die();
+}
+
+// 迁移组件配置
+$configuration = new Configuration($connection);
+$configuration->setName('Doctrine Migrations');
+$configuration->setMigrationsColumnLength(255); // 迁移记录表version字段长度
+$configuration->setMigrationsTableName(MIGRATION_TABLE_NAME); // 迁移记录表名称
+$configuration->setMigrationsDirectory(MIGRATION_FILE_DIR);
+$configuration->setMigrationsNamespace(MIGRATION_NAMESPACE);
+
+// 创建命令脚本
+$helperSet = new HelperSet([
+    'question' => new QuestionHelper(),
+    'db' => new ConnectionHelper($connection),
+    new ConfigurationHelper($connection, $configuration)
+]);
+
+$cli = new Application('Oss Doctrine Migration');
+$cli->setCatchExceptions(true);
+$cli->setHelperSet($helperSet);
+
+$cli->addCommands(array(
+    new DumpSchemaCommand(),
+    new ExecuteCommand(),
+    new GenerateCommand(),
+    new LatestCommand(),
+    new MigrateCommand(),
+    new RollupCommand(),
+    new StatusCommand(),
+    new VersionCommand(),
+    new GenerateModelCommand(), // 通过迁移文件初始化Model类
+));
+
+$cli->run();

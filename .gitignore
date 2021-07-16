@@ -1,0 +1,7 @@
+.DS_Store
+.git
+.idea
+conf/develop.ini
+log
+vendor
+composer.lock

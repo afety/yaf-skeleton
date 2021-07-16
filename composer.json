@@ -1,0 +1,30 @@
+{
+  "require": {
+    "hellogerard/jobby": "^3.5",
+    "doctrine/migrations": "^2.3",
+    "illuminate/database": "^5.8",
+    "illuminate/events": "^5.8",
+    "illuminate/pagination": "^5.8",
+    "ext-json": "*",
+    "symfony/mime": "^4.4",
+    "intervention/image": "^2.5",
+    "ext-simplexml": "*",
+    "resque/php-resque": "^1.3",
+    "ext-pcntl": "*",
+    "ext-posix": "*",
+    "jenssegers/mongodb": "^3.6",
+    "monolog/monolog": "^1.26",
+    "predis/predis": "^1.1",
+    "guzzlehttp/guzzle": "^6.5"
+  },
+  "autoload": {
+    "files": [
+      "application/library/Tools/Helpers.php"
+    ],
+    "psr-4": {
+      "Dao\\": "application/models/Dao",
+      "Database\\": "database",
+      "Library\\": "application/library"
+    }
+  }
+}
