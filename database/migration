@@ -19,6 +19,7 @@ use Library\Extend\Migration\GenerateModelCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
+use Yaf\Config\Ini;
 
 define('MIGRATION_FILE_DIR', joinPaths(APPLICATION_PATH, '/database/migrations'));
 define('MIGRATION_FILE_TEMPLATE_DIR',
@@ -26,12 +27,13 @@ define('MIGRATION_FILE_TEMPLATE_DIR',
 define('MIGRATION_TABLE_NAME', 'migration_version');
 define('MIGRATION_NAMESPACE', 'Database\Migrations');
 
+$config = new Ini(APPLICATION_CONFIGURATION_PATH);
 $dbConfig = [
     'driver' => 'pdo_mysql',
-    'host' => MYSQL_HOST,
-    'dbname' => MYSQL_DATABASE,
-    'user' => MYSQL_USERNAME,
-    'password' => MYSQL_PASSWORD,
+    'host' => $config->get('mysql.params.host'),
+    'dbname' => $config->get('mysql.params.database'),
+    'user' => $config->get('mysql.params.username'),
+    'password' => $config->get('mysql.params.password'),
     'charset' => 'UTF8',
 ];
 
@@ -64,7 +66,7 @@ $helperSet = new HelperSet([
     new ConfigurationHelper($connection, $configuration)
 ]);
 
-$cli = new Application('Oss Doctrine Migration');
+$cli = new Application(' Doctrine Migration');
 $cli->setCatchExceptions(true);
 $cli->setHelperSet($helperSet);
 

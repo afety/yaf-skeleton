@@ -20,6 +20,12 @@ class MysqlModel extends Model
     protected $table;
 
     /**
+     * default mysql connection
+     * @var string
+     */
+    protected $connection = "mysql";
+
+    /**
      * @var string
      */
     protected $dateFormat = "Y-m-d H:i:s";
@@ -59,9 +65,9 @@ class MysqlModel extends Model
      * @return HasManyThrough
      */
     public function hasManyThrough(
-        string $related, string $through,
-        string $firstKey = null, string $secondKey = null,
-        string $localKey = null, string $secondLocalKey = null): HasManyThrough
+        $related, $through,
+        $firstKey = null, $secondKey = null,
+        $localKey = null, $secondLocalKey = null): HasManyThrough
     {
         return parent::hasManyThrough($related, $through,
             $firstKey, $secondKey, $localKey, $secondLocalKey)->select($related::getTableName() . ".*");
@@ -105,7 +111,7 @@ class MysqlModel extends Model
      * @param string $deletedAt
      * @return $this
      */
-    public function setDeletedAt(string $deletedAt)
+    public function setDeletedAt($deletedAt)
     {
         $this->deleted_at = $deletedAt;
         return $this;
@@ -115,7 +121,7 @@ class MysqlModel extends Model
      * @param string $updatedAt
      * @return $this
      */
-    public function setUpdatedAt(string $updatedAt)
+    public function setUpdatedAt($updatedAt)
     {
         $this->updated_at = $updatedAt;
         return $this;
@@ -125,7 +131,7 @@ class MysqlModel extends Model
      * @param string $createdAt
      * @return $this
      */
-    public function setCreatedAt(string $createdAt)
+    public function setCreatedAt($createdAt)
     {
         $this->created_at = $createdAt;
         return $this;

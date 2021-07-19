@@ -69,27 +69,23 @@ class Bootstrap extends Bootstrap_Abstract
         $capsule = new Capsule();
 
         // 从配置中获取数据库连接设置
-        $capsule->addConnection([
-            'driver' => 'mysql',
-            'host' => MYSQL_HOST,
-            'database' => MYSQL_DATABASE,
-            'username' => MYSQL_USERNAME,
-            'password' => MYSQL_PASSWORD,
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-        ]);
+        $databaseConfig = include joinPaths(APPLICATION_CONSTANT_DIR, 'database.php');
 
-        // 从配置中获取mongodb配置
-        $capsule->addConnection([
-            'driver' => 'mongodb',
-            'host' => MONGODB_HOST,
-            'port' => MONGODB_PORT,
-            'username' => MONGODB_USERNAME,
-            'password' => MONGODB_PASSWORD,
-            'options' => [
-                "database" => MONGODB_DATABASE
-            ]
-        ], 'mongodb');
+        $defaultConnectionName = $databaseConfig['default'] ?? 'mysql';
+        $connections = $databaseConfig['connections'];
+
+        foreach ($connections as $name => $connections) {
+            if ($name == 'mysql') {
+                // add MySQL connections
+                $this->addMysqlConnections($capsule, $connections);
+            } else if ($name == 'mongodb') {
+                // add MongoDB connections
+                $this->addMongodbConnections($capsule, $connections);
+            } else if ($name == 'redis') {
+                // add Redis connections
+                $this->addRedisConnections($capsule, $connections);
+            }
+        }
 
         // 设置mongodb数据库支持，如果name是mongodb，交给Jenssegers\Mongodb\Connection来处理
         $capsule->getDatabaseManager()->extend('mongodb', function ($config) {
@@ -106,5 +102,46 @@ class Bootstrap extends Bootstrap_Abstract
         $capsule->bootEloquent();
 
         class_alias('\Illuminate\Database\Capsule\Manager', 'DB');
+    }
+
+    private function addMysqlConnections(Capsule &$capsule, array $connections)
+    {
+        foreach ($connections as $name => $connection) {
+            $capsule->addConnection([
+                'driver' => 'mysql',
+                'host' => $connection['host'],
+                'port' => $connection['port'],
+                'database' => $connection['database'],
+                'username' => $connection['username'],
+                'password' => $connection['password'],
+                'charset' => $connection['charset'],
+                'collation' => $connection['collation'],
+            ], $name);
+        }
+
+        return true;
+    }
+
+    private function addMongodbConnections(Capsule &$capsule, array $connections)
+    {
+        foreach ($connections as $name => $connection) {
+            $capsule->addConnection([
+                'driver' => 'mongodb',
+                'host' => $connection['host'],
+                'port' => $connection['port'],
+                'username' => $connection['username'],
+                'password' => $connection['password'],
+                'options' => [
+                    "database" => $connection['database']
+                ]
+            ], $name);
+        }
+
+        return true;
+    }
+
+    private function addRedisConnections(Capsule &$capsule, array $connections)
+    {
+        
     }
 }
