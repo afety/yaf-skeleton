@@ -8,7 +8,7 @@ require APPLICATION_PATH . '/vendor/autoload.php';
 
 // 配置文件
 $environ = empty(getYafEnviron()) ? 'develop' : getYafEnviron();
-$filepath = APPLICATION_PATH . '/conf/' . $environ . '.ini';
+$filepath = APPLICATION_PATH . '/env/' . $environ . '.ini';
 define('APPLICATION_CONFIGURATION_PATH', $filepath);
 
 // cli脚本位置
