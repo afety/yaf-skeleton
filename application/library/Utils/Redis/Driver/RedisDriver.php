@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Library\Utils\Redis\Driver;
 
 use Library\Utils\Redis\Exception\CacheException;
@@ -86,9 +88,9 @@ class RedisDriver implements DriverInterface
     public function set($key, $value, $ttl = null)
     {
         if (is_null($ttl)) {
-            return $this->connectedClient()->set($key, serialize($value));
+            return !!$this->connectedClient()->set($key, serialize($value));
         } else {
-            return $this->connectedClient()->setex($key, $ttl, serialize($value));
+            return !!$this->connectedClient()->setex($key, $ttl, serialize($value));
         }
     }
 

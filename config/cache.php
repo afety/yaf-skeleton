@@ -13,7 +13,7 @@ return [
             'port' => $config->get('redis.params.port') ?? 6379,
             'password' => $config->get('redis.params.password') ?? '',
             'database' => $config->get('redis.params.database') ?? 0,
-            'prefix' => $config->get('redis.params.prefix') ?? APP_NAME,
+            'prefix' => $config->get('redis.params.prefix') ?? APP_NAME . ":",
         ],
     ],
 ];
