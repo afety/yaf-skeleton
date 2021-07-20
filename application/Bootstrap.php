@@ -68,13 +68,13 @@ class Bootstrap extends Bootstrap_Abstract
         $defaultConnectionName = $databaseConfig['default'] ?? 'mysql';
         $connections = $databaseConfig['connections'];
 
-        foreach ($connections as $name => $connections) {
+        foreach ($connections as $name => $connection) {
             if ($name == 'mysql') {
                 // add MySQL connections
-                $this->addMysqlConnections($capsule, $connections);
+                $this->addMysqlConnections($capsule, $connection);
             } else if ($name == 'mongodb') {
                 // add MongoDB connections
-                $this->addMongodbConnections($capsule, $connections);
+                $this->addMongodbConnections($capsule, $connection);
             }
         }
 

@@ -23,7 +23,7 @@ class MysqlModel extends Model
      * default mysql connection
      * @var string
      */
-    protected $connection = "mysql";
+    protected $connection = "default";
 
     /**
      * @var string
