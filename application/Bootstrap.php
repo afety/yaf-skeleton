@@ -5,6 +5,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher as EventDispatcher;
 use Jenssegers\Mongodb\Connection;
 use Library\Exceptions\MyErrorException;
+use Library\Utils\Redis\CacheProvider;
 use Yaf\Application;
 use Yaf\Bootstrap_Abstract;
 use Yaf\Dispatcher;
@@ -49,16 +50,9 @@ class Bootstrap extends Bootstrap_Abstract
         $dispatcher->registerPlugin($user);
     }
 
-    // 加载常量目录
-    public function _initConstant()
+    public function _initAppConstants()
     {
-        define('APPLICATION_CONSTANT_DIR', joinPaths(APPLICATION_PATH, 'constant'));
-        foreach (scandir(APPLICATION_CONSTANT_DIR) as $filename) {
-            $path = joinPaths(APPLICATION_CONSTANT_DIR, $filename);
-            if (is_dir($path)) continue;
-
-            include_once $path;
-        }
+        include_once joinPaths(APPLICATION_PATH, "config/app.php");
     }
 
     /**
@@ -69,7 +63,7 @@ class Bootstrap extends Bootstrap_Abstract
         $capsule = new Capsule();
 
         // 从配置中获取数据库连接设置
-        $databaseConfig = include joinPaths(APPLICATION_CONSTANT_DIR, 'database.php');
+        $databaseConfig = include joinPaths(APPLICATION_PATH, '/config/database.php');
 
         $defaultConnectionName = $databaseConfig['default'] ?? 'mysql';
         $connections = $databaseConfig['connections'];
@@ -81,9 +75,6 @@ class Bootstrap extends Bootstrap_Abstract
             } else if ($name == 'mongodb') {
                 // add MongoDB connections
                 $this->addMongodbConnections($capsule, $connections);
-            } else if ($name == 'redis') {
-                // add Redis connections
-                $this->addRedisConnections($capsule, $connections);
             }
         }
 
@@ -140,8 +131,22 @@ class Bootstrap extends Bootstrap_Abstract
         return true;
     }
 
-    private function addRedisConnections(Capsule &$capsule, array $connections)
+    /**
+     * @throws \Library\Utils\Redis\Exception\InvalidArgumentException
+     */
+    public function _initCache()
     {
-        
+        $cacheConfig = include joinPaths(APPLICATION_PATH, '/config/cache.php');
+        $defaultName = $cacheConfig['default'];
+
+        $connections = $cacheConfig['connections'];
+
+        $cacheManager = new CacheProvider();
+        $cacheManager->setDefaultConnectionName($defaultName);
+        foreach ($connections as $name => $connection) {
+            $cacheManager->addConnection($connection, $name);
+        }
+
+        $cacheManager->setAsGlobal();
     }
 }

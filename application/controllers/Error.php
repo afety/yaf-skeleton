@@ -30,6 +30,7 @@ class ErrorController extends AbstractController
             }
         }
 
+        echo $exception->getTraceAsString();
         $this->failure($exception->getMessage());
     }
 
