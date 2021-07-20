@@ -50,9 +50,12 @@ class Bootstrap extends Bootstrap_Abstract
         $dispatcher->registerPlugin($user);
     }
 
+    /**
+     * 加载框架用常量定义目录
+     */
     public function _initAppConstants()
     {
-        include_once joinPaths(APPLICATION_PATH, "config/app.php");
+        include_once joinPaths(APPLICATION_PATH, "config/constant.php");
     }
 
     /**
@@ -65,7 +68,6 @@ class Bootstrap extends Bootstrap_Abstract
         // 从配置中获取数据库连接设置
         $databaseConfig = include joinPaths(APPLICATION_PATH, '/config/database.php');
 
-        $defaultConnectionName = $databaseConfig['default'] ?? 'mysql';
         $connections = $databaseConfig['connections'];
 
         foreach ($connections as $name => $connection) {

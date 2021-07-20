@@ -2,6 +2,7 @@
 .git
 .idea
 conf/develop.ini
+env/develop.ini
 log
 vendor
 composer.lock

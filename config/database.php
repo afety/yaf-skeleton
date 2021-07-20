@@ -3,11 +3,10 @@
 $config = new Yaf\Config\Ini(APPLICATION_CONFIGURATION_PATH, getYafEnviron());
 
 return [
-    'default' => 'default',
-
     'connections' => [
 
         'mysql' => [
+            // default为默认连接名称，不可修改
             'default' => [
                 'driver' => 'mysql',
                 'host' => $config->get('mysql.params.host'),

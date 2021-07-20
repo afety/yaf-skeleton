@@ -18,10 +18,5 @@ define("APPLICATION_CLI_PATH", joinPaths(APPLICATION_PATH, 'cli/cli.php'));
 $app = (new Application(APPLICATION_CONFIGURATION_PATH))->bootstrap();
 $app->getDispatcher()->returnResponse(false);
 
-// 被migration引入后悔造成问题，因此应用的分发到各自的入口文件执行
+// 被migration引入后会造成问题，因此应用的分发到各自的入口文件执行
 // 区分是命令行访问还是其他形式
-//if (strtolower(php_sapi_name()) === 'cli') {
-//    $app->getDispatcher()->dispatch(new Simple());
-//} else {
-//    $app->run();
-//}
