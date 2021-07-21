@@ -21,7 +21,7 @@ class UserPlugin extends Plugin_Abstract
 
         define('TAG', $_SERVER['CUSTOM_TAG']);
 
-        NewLog::infoLog(array_merge($_SERVER, ['RAW_MESSAGE' => @file_get_contents('php://input')]));
+        NewLog::infoLog($_SERVER);
     }
 
     public function dispatchLoopStartup(Request_Abstract $request, Response_Abstract $response)

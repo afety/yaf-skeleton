@@ -150,5 +150,20 @@ class Bootstrap extends Bootstrap_Abstract
         }
 
         $cacheManager->setAsGlobal();
+
+
+    }
+
+    /**
+     * 初始化Resque队列的链接配置
+     */
+    public function _initResqueDsn()
+    {
+        $cacheConfig = include joinPaths(APPLICATION_PATH, '/config/cache.php');
+        $defaultName = $cacheConfig['default'];
+
+        $connections = $cacheConfig['connections'];
+        $connection = $connections[$defaultName];
+        Resque::setBackend("redis://:" . $connections['password'] . "@" . $connections['host'] .":" . $connections['port'] . "/" . $connections['database']);
     }
 }
