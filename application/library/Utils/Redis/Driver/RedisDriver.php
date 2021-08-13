@@ -13,7 +13,7 @@ class RedisDriver implements DriverInterface
     /**
      * @var Client null
      */
-    private static $client = null;
+    private $client = null;
 
     /**
      * RedisDriver constructor.
@@ -32,6 +32,8 @@ class RedisDriver implements DriverInterface
             'port' => 6379,
             'password' => '',
             'database' => 0,
+            'timeout' => 3,
+            'read_write_timeout' => 3,
         ];
 
         foreach ($settings as $key => $value) {
@@ -40,7 +42,7 @@ class RedisDriver implements DriverInterface
             $config[$key] = $value;
         }
 
-        self::$client = new Client($config, ['prefix' => $settings['prefix'] ?? '']);
+        $this->client = new Client($config, ['prefix' => $settings['prefix'] ?? '']);
     }
 
     /**
@@ -48,11 +50,16 @@ class RedisDriver implements DriverInterface
      */
     private function connectedClient()
     {
-        if (!self::$client->isConnected()) {
-            self::$client->connect();
+        if (!$this->client->isConnected()) {
+            $this->client->connect();
         }
 
-        return self::$client;
+        return $this->client;
+    }
+
+    public function getClient()
+    {
+        return $this->client;
     }
 
     /**

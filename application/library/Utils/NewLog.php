@@ -3,9 +3,8 @@
 namespace Library\Utils;
 
 use Exception;
-use Illuminate\Support\Facades\Redis;
 use Library\Traits\SingletonTrait;
-use Monolog\Handler\RedisHandler;
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Yaf\Application;
 
@@ -28,6 +27,21 @@ class NewLog
     private static $_gitCache = [];
 
     /**
+     * @return string
+     */
+    public static function getLogFile()
+    {
+        $dir = LOG_DIR ?? joinPaths(APPLICATION_PATH, 'logs');
+        if (!file_exists($dir)) {
+            mkdir($dir, '0777', true);
+        }
+
+        $filePath = joinPaths($dir, date('Y-m-d') . '.log');
+
+        return $filePath;
+    }
+
+    /**
      * @param $name
      * @param $arguments
      * @return bool
@@ -40,7 +54,7 @@ class NewLog
         $logType = str_replace('Log', '', $name);
 
         $message = json_encode_c([
-            'time' => getLogDateTime(),
+            'time' => getMicroDateTime(),
             'ip' => gethostbyname(gethostname()),
             'tag' => $_SERVER['CUSTOM_TAG'],
             'logType' => $logType,
@@ -48,20 +62,10 @@ class NewLog
             'messages' => head($arguments)
         ]);
 
-//        $log = new Logger('OSS');
-//        $log->pushHandler(new RedisHandler());
+        // 文件可写判定
+        file_put_contents(self::getLogFile(), $message . PHP_EOL, FILE_APPEND);
 
-        // 本地环境则直接写入文件中
-        if (!isDevelop()) {
-            // 将日志写入redis
-
-        }
-        if (isDevelop()) {
-            return self::localWrite($message);
-        }
-
-        // todo: 将日志队列写作为一个附加选项
-//        return !!Queue::getInstance()->addLog($message);
+        return true;
     }
 
     /**
@@ -84,6 +88,7 @@ class NewLog
             'Controller' => $request->getControllerName(),
             'Action' => $request->getActionName(),
             'Method' => $request->getMethod(),
+            'Params' => json_encode_c(getRequestAllData($request)),
         ];
 
         return $record;
@@ -106,22 +111,5 @@ class NewLog
         }
 
         return self::$_gitCache;
-    }
-
-    /**
-     * @param string $message
-     * @return bool
-     */
-    private static function localWrite(string $message)
-    {
-        $dir = LOG_DIR ?? joinPaths(APPLICATION_PATH, 'logs');
-        if (!file_exists($dir)) {
-            mkdir($dir, '0777', true);
-        }
-
-        $filePath = joinPaths($dir, date('Y-m-d') . '.log');
-        file_put_contents($filePath, $message . PHP_EOL, FILE_APPEND);
-
-        return true;
     }
 }

@@ -150,8 +150,6 @@ class Bootstrap extends Bootstrap_Abstract
         }
 
         $cacheManager->setAsGlobal();
-
-
     }
 
     /**
@@ -164,6 +162,7 @@ class Bootstrap extends Bootstrap_Abstract
 
         $connections = $cacheConfig['connections'];
         $connection = $connections[$defaultName];
-        Resque::setBackend("redis://:" . $connections['password'] . "@" . $connections['host'] .":" . $connections['port'] . "/" . $connections['database']);
+        Resque::setBackend("redis://:" . $connection['password'] . "@" . $connection['host'] .":" .
+            $connection['port'] . "/" . $connection['database']);
     }
 }

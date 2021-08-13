@@ -3,6 +3,7 @@
 namespace Library\Utils\Redis;
 
 use Library\Utils\Redis\Driver\DriverInterface;
+use Library\Utils\Redis\Driver\RedisDriver;
 use Library\Utils\Redis\Exception\InvalidArgumentException;
 
 class CacheProvider
@@ -13,7 +14,7 @@ class CacheProvider
     private static $instance = null;
 
     /**
-     * @var DriverInterface array
+     * @var array DriverInterface
      */
     private $connections = [];
 
@@ -21,6 +22,11 @@ class CacheProvider
      * @var string
      */
     private $default = 'default';
+
+    /**
+     * @var string
+     */
+    private $temporaryConnection = '';
 
     /**
      * @return CacheProvider
@@ -62,13 +68,14 @@ class CacheProvider
 
         $driverClass = self::getDriverClass($driverName);
         $driver = new $driverClass($settings);
+
         $this->connections[$name] = $driver;
 
         return true;
     }
 
     /**
-     * @return array
+     * @return DriverInterface[]
      */
     public function getConnections()
     {
@@ -79,9 +86,34 @@ class CacheProvider
      * @param string $name
      * @return DriverInterface|null
      */
-    public function getConnect(string $name)
+    public function getConnect(string $name = 'default')
     {
         return $this->connections[$name] ?? null;
+    }
+
+    /**
+     * @param string $connectionName
+     * @return bool
+     * @throws InvalidArgumentException
+     */
+    public function select(string $connectionName)
+    {
+        if (!array_key_exists($connectionName, $this->connections)) {
+            throw new InvalidArgumentException("Redis: connection '$connectionName' not existed ");
+        }
+
+        $this->temporaryConnection = $connectionName;
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    private function resetConnection()
+    {
+        $this->temporaryConnection = '';
+        $this->default = 'default';
+        return true;
     }
 
     /**
@@ -100,6 +132,10 @@ class CacheProvider
      */
     public function callCacheDriver($method, $arguments)
     {
-        return $this->connections[$this->default]->$method(...$arguments);
+        $connectionName = $this->default;
+        if (!empty($this->temporaryConnection)) $connectionName = $this->temporaryConnection;
+        $this->resetConnection();
+
+        return $this->connections[$connectionName]->$method(...$arguments);
     }
 }

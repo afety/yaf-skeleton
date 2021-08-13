@@ -304,7 +304,7 @@ function arrayDisplay(array $arr, string $glue = "\n")
  * @return string
  * @throws Exception
  */
-function getLogDateTime()
+function getMicroDateTime()
 {
     $t = microtime(true);
     $micro = sprintf("%06d", ($t - floor($t)) * 1000000);
@@ -356,10 +356,7 @@ function imageBase64(string $filePath)
 function getRequestData(Request_Abstract $request, ...$args)
 {
     if (empty($args)) {
-        if ($request->isPost()) return $request->getPost();
-        else if ($request->isGet()) return $request->getQuery();
-        else if ($request->isCli()) return $request->getParams();
-        else return null;
+        getRequestAllData($request);
     } else {
         $data = [];
         foreach ($args as $arg) {
@@ -377,4 +374,16 @@ function getRequestData(Request_Abstract $request, ...$args)
 
         return $data;
     }
+}
+
+/**
+ * @param Request_Abstract $request
+ * @return array|null
+ */
+function getRequestAllData(Request_Abstract $request)
+{
+    if ($request->isPost()) return $request->getPost();
+    else if ($request->isGet()) return $request->getQuery();
+    else if ($request->isCli()) return $request->getParams();
+    else return null;
 }
