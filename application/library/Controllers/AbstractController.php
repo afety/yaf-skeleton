@@ -13,7 +13,6 @@ abstract class AbstractController extends \Yaf\Controller_Abstract
 
     /**
      * 分页页号
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2020/10/27 14:46
      * @var int
      */
@@ -21,14 +20,12 @@ abstract class AbstractController extends \Yaf\Controller_Abstract
 
     /**
      * 每页内容数量
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2020/10/27 14:47
      * @var int
      */
     protected $pageSize = 10;
 
     /**
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/25 15:49
      */
     public function init()
@@ -53,7 +50,6 @@ abstract class AbstractController extends \Yaf\Controller_Abstract
      * @param bool $data
      * @param string $msg
      * @param int $code
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/25 15:49
      */
     public function success($data = true, $msg = '', $code = 200)
@@ -70,7 +66,6 @@ abstract class AbstractController extends \Yaf\Controller_Abstract
     /**
      * @param array $resData
      * @param bool $stop
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/25 15:49
      */
     private function sendResponse(array $resData, bool $stop = false)
@@ -91,7 +86,6 @@ abstract class AbstractController extends \Yaf\Controller_Abstract
      * @param string $msg
      * @param int $code
      * @param bool $data
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/25 15:49
      */
     public function failure($msg = '', $code = 400, $data = false)

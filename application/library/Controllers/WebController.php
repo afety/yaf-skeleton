@@ -32,7 +32,6 @@ abstract class WebController extends AbstractController
     /**
      * @throws UserNotExistException
      * @throws Exception
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2020/12/31 20:56
      */
     public function init()
@@ -97,7 +96,6 @@ abstract class WebController extends AbstractController
     /**Cookie配置错误：配置项错误
      * 权限检测
      * @return bool
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2020/7/29 10:20
      */
     public function checkPermission()
@@ -119,7 +117,6 @@ abstract class WebController extends AbstractController
     /**
      * 获取蛇形class名
      * @return mixed
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2020/7/29 10:20
      */
     protected function snakeClassName()

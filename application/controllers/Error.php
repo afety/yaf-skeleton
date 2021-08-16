@@ -11,7 +11,6 @@ class ErrorController extends AbstractController
 
     /**
      * @param Exception $exception
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/4/12 15:29
      */
     public function errorAction(Exception $exception)

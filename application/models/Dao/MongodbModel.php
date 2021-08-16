@@ -22,7 +22,6 @@ class MongodbAbstract extends Model
      * https://github.com/jenssegers/laravel-mongodb/issues/1238
      * @param null $connection
      * @return Connection|ConnectionInterface
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2020/10/28 21:19
      */
     public static function resolveConnection($connection = null)

@@ -12,7 +12,6 @@ abstract class WechatController extends AbstractController
     protected $user = null;
 
     /**
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/6/10 15:18
      */
     public function init()

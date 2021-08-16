@@ -13,28 +13,24 @@ abstract class AbstractWorker extends Resque_Worker
 {
     /**
      * workers数量
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/24 15:25
      * @var int
      */
     private $count = 1;
     /**
      * 队列数量为0 时候 间隔多久扫描队列
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/24 15:26
      * @var int
      */
     private $interval = 5;
     /**
      * 是否打印详细日志
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/24 15:26
      * @var bool
      */
     private $verbose = false;
     /**
      * 队列无数据时候是否阻塞
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/24 15:27
      * @var bool
      */
@@ -63,7 +59,6 @@ abstract class AbstractWorker extends Resque_Worker
      * @param int $count
      * @return $this
      * @throws NormalException
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/24 15:36
      */
     public function setCount(int $count = 1)
@@ -78,7 +73,6 @@ abstract class AbstractWorker extends Resque_Worker
      * @param int $interval
      * @return $this
      * @throws NormalException
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/24 15:36
      */
     public function setInterval(int $interval = 1)
@@ -92,7 +86,6 @@ abstract class AbstractWorker extends Resque_Worker
     /**
      * @param bool $verbose
      * @return $this
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/24 15:37
      */
     public function setVerbose(bool $verbose = false)
@@ -104,7 +97,6 @@ abstract class AbstractWorker extends Resque_Worker
     /**
      * @param bool $blocking
      * @return $this
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/24 15:37
      */
     public function setBlocking(bool $blocking = true)
@@ -117,7 +109,6 @@ abstract class AbstractWorker extends Resque_Worker
      * 自定义worker运行函数，方便控制及日志增添
      * 切勿使用原有work函数
      * @throws WorkerRuntimeException
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/24 15:44
      */
     public function run()

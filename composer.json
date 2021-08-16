@@ -4,6 +4,19 @@
   "type": "project",
   "license": "MIT",
   "minimum-stability": "stable",
+  "repositories": [{
+    "type": "package",
+    "package": {
+      "name": "afety/yaf-skeleton",
+      "version": "1.0.0",
+      "source": {
+        "url": "https://github.com/afety/yaf-skeleton",
+        "type": "git",
+        "reference": "master"
+      }
+    }
+  }
+  ],
   "require": {
     "hellogerard/jobby": "^3.5",
     "doctrine/migrations": "^2.3",

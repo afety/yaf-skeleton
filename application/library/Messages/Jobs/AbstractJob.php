@@ -15,7 +15,6 @@ abstract class AbstractJob extends Resque_Job
 {
     /**
      * 工厂方法中使用args进行的赋值, 父类的getArguments方法不适用此处
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/25 14:27
      * @var array
      */
@@ -37,7 +36,6 @@ abstract class AbstractJob extends Resque_Job
      * @param array $args
      * @param string $queueName
      * @return bool|string
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/25 16:14
      */
     public static function addQueue(array $args, string $queueName = '')
@@ -54,7 +52,6 @@ abstract class AbstractJob extends Resque_Job
      * 采用Job名称作为Queue名称
      * @param string $workerClass
      * @return AbstractWorker
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/25 17:14
      */
     public static function createWorker(string $workerClass = '')
@@ -73,7 +70,6 @@ abstract class AbstractJob extends Resque_Job
 
     /**
      * 消费前操作
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/29 10:15
      */
     public function setUp()
@@ -85,7 +81,6 @@ abstract class AbstractJob extends Resque_Job
      * 队列消费
      * @return bool|void
      * @throws JobFailedException
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/25 14:10
      */
     final public function perform()
@@ -110,7 +105,6 @@ abstract class AbstractJob extends Resque_Job
      * @param $exception
      * @param Resque_Job $job
      * @return bool
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/4/1 17:16
      */
     private function failureHandler($exception, Resque_Job $job)
@@ -129,14 +123,12 @@ abstract class AbstractJob extends Resque_Job
      * JOB运行的方法
      * @param array $args
      * @return mixed
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/25 16:14
      */
     abstract public function run(array $args);
 
     /**
      * 消费完毕的后置操作
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/29 10:16
      */
     public function tearDown()
@@ -148,7 +140,6 @@ abstract class AbstractJob extends Resque_Job
      * 任务失败后主动抛异常
      * @param string $msg
      * @throws JobFailedException
-     * @author tanghan <tanghan@ifeng.com>
      * @time 2021/3/25 13:51
      */
     protected function failed(string $msg)
