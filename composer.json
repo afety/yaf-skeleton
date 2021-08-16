@@ -1,4 +1,9 @@
 {
+  "name": "hotwater",
+  "description": "a personal yaf skeleton",
+  "type": "project",
+  "license": "MIT",
+  "minimum-stability": "stable",
   "require": {
     "hellogerard/jobby": "^3.5",
     "doctrine/migrations": "^2.3",
