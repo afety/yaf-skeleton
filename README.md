@@ -7,9 +7,9 @@ yaf项目模板
 ##顶级目录与文件
 * application 应用主要代码目录，包括library(本地类库)、models(模型)、modules(对外服务，controller目录)、plugins(插件类库)等
 * cli               命令行运行入口文件
-* conf              配置文件目录
-* constant          常量定义目录
+* config            配置目录 - 将环境文件中的信息固化为配置信息
 * database          数据迁移库
+* env               环境文件目录，根据不同环境加载不同的文件
 * log               本地日志目录
 * public            入口文件
 * vendor            composer安装类库
@@ -37,6 +37,8 @@ yaf项目模板
     * Trais         Trait类库
         * SingletonTrait.php 单例模式Trait
     * Utils         应用相关工具库
+        * Redis     自实现的PSR-16标准的Redis缓存工具
+        * NewLog    日志库
 * models            model目录，在业务较简单时候可以将Manager与Service合并为Bll层
     * Dao           数据访问层，负责与底层MySQL，Oracle等进行数据交互，数据模型类在此定义
     * Manager       通用业务处理层
@@ -73,7 +75,8 @@ database 迁移文件操作哦目录
 
 
 ## ORM - Eloquent
-Eloquent是一款较为优秀的orm组件，laravel框架便深度集成了Eloquent。因此关于Eloquent的教程文档较多，可以直接查看laravel文档 https://laravelacademy.org/post/8194.html 不过需要注意版本
+Eloquent是一款较为优秀的orm组件，laravel框架便深度集成了Eloquent。因此关于Eloquent的教程文档较多
+可以直接查看laravel文档 https://laravelacademy.org/post/8194.html 不过需要注意版本
 
 使用Eloquent是为了将对数据库的访问隔离在Dao层，避免在Manager或Service层中直接对数据库的操作导致的重复代码与维护性的降低
 
@@ -97,16 +100,20 @@ ExtInterface目录下的文件都需要继承AbstractApi，该类实现了对htt
 ## crontab周期任务管理 - jobby
 将crontab的任务监控纳入到代码跟踪，避免需要操作生产机器以及可能存在的忘记在crontab添加新增或删除过时任务
 
-## 配置跟踪
-现有conf目录文件结构变更为
+## 配置分级 env -> config
+现有配置分为env环境变量配置与config系统配置
+
+env目录为环境变量目录，依据不同环境进行配置分割，开发、测试环境加载develop.ini文件，生产环境加载product.ini文件
 * develop.ini   个人开发用配置，不纳入git版本管理
 * sample.ini    配置样例，在下载项目后，复制文件更名为develop.ini
 * product.ini   生产环境用配置
 
+config目录下为系统配置文件
+* database：数据库配置
+* cache：   缓存配置
+*constant： 常量配置
 
-现有机器应用发布时候，对新配置的增添需要在多台机器上做重复配置，容易造成配置遗漏、错误等情况。
-因此决定将生成配置也纳入git管理，在更新生成配置时候，只需要发布代码即可。通过代码控制在不同的环境中加载不同的配置文件
-
+新的配置系统将生产配置文件纳入管理，方便生产配置的变更，同时使用文件划分的方式来进行环境分割，尽可能避免误操作
 
 ## composer类加载 - psr-7
 yaf类很多都需要带默认后缀Model，如models/Bll/Data/Amt.php 中定义的类为 AmtModel
@@ -118,11 +125,16 @@ yaf类很多都需要带默认后缀Model，如models/Bll/Data/Amt.php 中定义
 在Bootstrap文件中将捕捉到的Error转换为Exception抛出后由Error.php文件的errorActio函数统一处理
 通过异常code或者所属异常类进行不同的处理
 
-## 常量目录 constant
-该目录下根据常量的不同使用用途进行文件划分，如
-app.php 中定义对整体应用相关的常量
-mysql.php 中定义对mysql访问相关的常量，如host、password等
-redis.php 中定义对redis访问相关的常量
-
 常量的加载是在应用的初始化时候做的
 在配置与应用代码之间加入常量目录是为了使用IDE的自动补全功能，避免拼写错误等问题
+
+## 数据库使用配置化
+系统集成Eloquent作为ORM框架，该框架支持两种数据库使用模式，一种为Model类继承后的表模块类的使用方式，一种是直接的SQL运行方式
+
+Model继承方式的使用可以参考Eloquent文档
+
+直接的SQL运行方式：\DB::connection()->select($rawSql);
+返回结果为stdClass对象数组
+
+## 缓存标准化
+PSR-16标准：https://learnku.com/docs/psr/psr-16-simple-cache/1628
