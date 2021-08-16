@@ -82,6 +82,13 @@ Eloquent是一款较为优秀的orm组件，laravel框架便深度集成了Eloqu
 
 与migration的集成：在迁移文件命令 php migration migrations:generateModel 能够自动生成Model文件会自动集成预先写好的Eloquent Model基类，MysqlModel或者MongodbModel，分别对应model类对MySQL、MongoDB的访问
 
+Eloquent支持两种数据库使用模式，一种为Model类继承后的表模块类的使用方式，一种是直接的SQL运行方式
+
+Model继承方式的使用可以参考Eloquent文档
+
+直接的SQL运行方式：\DB::connection()->select($rawSql);
+返回结果为stdClass对象数组
+
 ## 消息队列与持久化 - resque+supervisor
 使用resque是为了替代cli运行模式，相比较使用popen来运行后台任务或者较为耗时的操作，使用resque做任务队列能够做到对后台任务的运行、重试、失败等做全方面的监控。
 
@@ -127,14 +134,6 @@ yaf类很多都需要带默认后缀Model，如models/Bll/Data/Amt.php 中定义
 
 常量的加载是在应用的初始化时候做的
 在配置与应用代码之间加入常量目录是为了使用IDE的自动补全功能，避免拼写错误等问题
-
-## 数据库使用配置化
-系统集成Eloquent作为ORM框架，该框架支持两种数据库使用模式，一种为Model类继承后的表模块类的使用方式，一种是直接的SQL运行方式
-
-Model继承方式的使用可以参考Eloquent文档
-
-直接的SQL运行方式：\DB::connection()->select($rawSql);
-返回结果为stdClass对象数组
 
 ## 缓存标准化
 PSR-16标准：https://learnku.com/docs/psr/psr-16-simple-cache/1628
