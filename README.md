@@ -129,7 +129,7 @@ yaf类很多都需要带默认后缀Model，如models/Bll/Data/Amt.php 中定义
 同时使用composer的files加载选项载入复制函数文件Helper.php
 
 ## 错误与异常处理
-在Bootstrap文件中将捕捉到的Error转换为Exception抛出后由Error.php文件的errorActio函数统一处理
+在Bootstrap文件中将捕捉到的Error转换为Exception抛出后由Error.php文件的errorAction函数统一处理
 通过异常code或者所属异常类进行不同的处理
 
 常量的加载是在应用的初始化时候做的
