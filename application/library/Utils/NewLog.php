@@ -33,7 +33,7 @@ class NewLog
     {
         $dir = LOG_DIR ?? joinPaths(APPLICATION_PATH, 'logs');
         if (!file_exists($dir)) {
-            mkdir($dir, '0777', true);
+            mkdir($dir, 0777, true);
         }
 
         $filePath = joinPaths($dir, date('Y-m-d') . '.log');
