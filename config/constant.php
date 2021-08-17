@@ -1,6 +1,8 @@
 <?php
 
-$config = new Yaf\Config\Ini(APPLICATION_CONFIGURATION_PATH, getYafEnviron());
+use Yaf\Config\Ini;
+
+$config = new Ini(APPLICATION_CONFIGURATION_PATH, getYafEnviron());
 define('APP_NAME', $config->get('app_name'));
 
 define("DAO_DIR", joinPaths(APPLICATION_PATH, '/application/models/Dao'));
