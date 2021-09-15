@@ -4,6 +4,7 @@ namespace Library\ExtInterfaces;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use http\QueryString;
 use Psr\Http\Message\ResponseInterface;
 
 abstract class AbstractApi
@@ -73,7 +74,7 @@ abstract class AbstractApi
     protected function sendPost(string $uri, array $data = [], array $headers = [], array $options = [])
     {
         return $this->send(self::METHOD_POST, $uri,
-            array_merge(['headers' => $headers, 'query' => $data], $options));
+            array_merge(['headers' => $headers, 'form_params' => $data], $options));
     }
 
 
@@ -87,7 +88,7 @@ abstract class AbstractApi
     protected function sendGet(string $uri, array $data = [], array $headers = [], array $options = [])
     {
         return $this->send(self::METHOD_GET, $uri,
-            array_merge(['headers' => $headers], $options));
+            array_merge(['headers' => $headers, 'query' => $data], $options));
     }
 
     /**

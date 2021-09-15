@@ -48,7 +48,7 @@ class ColumnParser
 
         $this->columnName = $column->getName();
         $this->comment = $column->getComment();
-        $this->variableType = TypeMap::getPHPType($column->getType()->getName());
+        $this->variableType = ($column->getNotnull() ? '' : '?' ).TypeMap::getPHPType($column->getType()->getName());
         $this->variableName = snakeToCamelCase($this->columnName);
         $this->upperName = ucfirst($this->variableName);
         $this->setterFuncName = self::SETTER_PREFIX . $this->upperName;

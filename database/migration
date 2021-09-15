@@ -27,7 +27,7 @@ define('MIGRATION_FILE_TEMPLATE_DIR',
 define('MIGRATION_TABLE_NAME', 'migration_version');
 define('MIGRATION_NAMESPACE', 'Database\Migrations');
 
-$config = new Ini(APPLICATION_CONFIGURATION_PATH);
+$config = $app->getConfig();
 $dbConfig = [
     'driver' => 'pdo_mysql',
     'host' => $config->get('mysql.params.host'),
