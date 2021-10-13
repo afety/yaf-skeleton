@@ -38,12 +38,12 @@ final class Version<version> extends MyAbstractMigration
 
         $table->addColumn('updated_at', 'datetime')
             ->setNotnull(true)
-            ->setDefault(date('Y-m-d H:i:s'))
+            ->setDefault('CURRENT_TIMESTAMP')
             ->setComment('更新时间');
 
         $table->addColumn('created_at', 'datetime')
             ->setNotnull(true)
-            ->setDefault(date('Y-m-d H:i:s'))
+            ->setDefault('CURRENT_TIMESTAMP')
             ->setComment('创建时间');
 
         $table->setPrimaryKey(['id']);
