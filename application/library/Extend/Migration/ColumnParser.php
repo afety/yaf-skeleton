@@ -11,7 +11,7 @@ class ColumnParser
     protected static $fieldComment = "'<columnName>' => '<comment>',";
     protected static $setterTemplate =
         '
-    /*
+    /**
      * @param <variableType> $<variableName>
      * @return $this
      */
@@ -22,7 +22,7 @@ class ColumnParser
     }';
     protected static $getterTemplate =
         '
-    /*
+    /**
      * @return <variableType>
      */
     public function <funcname>()
