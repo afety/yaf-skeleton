@@ -13,9 +13,21 @@ class MongodbAbstract extends Model
 {
     use SoftDeletes, ManagesTransactions;
 
-    protected $connection = 'mongodb';
-
     protected $dateFormat = 'Y-m-d H:i:s';
+
+    protected $dates = ['deleted_at', 'created_at', 'updated_at'];
+
+    /**
+     * 原始链接名称变量名为connection
+     * Jenssegers\Mongodb\Eloquent\Model 继承 illuminate\database\Eloquent\Model
+     * 会将connection置为null，因此需要变更为其他名称，且提供getConnectionName方法
+     */
+    protected $connectionName = 'mongodb';
+
+    public function getConnectionName()
+    {
+        return $this->connectionName;
+    }
 
     /**
      * 解决save delete update等操作触发的异常
@@ -26,7 +38,7 @@ class MongodbAbstract extends Model
      */
     public static function resolveConnection($connection = null)
     {
-        return static::$resolver->connection('mongodb');
+        return static::$resolver->connection($connection);
     }
 
     public function scopeOrderByCreatedAt(Builder $query)

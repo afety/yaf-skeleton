@@ -1,7 +1,7 @@
 <?php
 
 use Library\Controllers\AbstractController;
-use Library\Exceptions\JobFailedException;
+use Library\Utils\NewLog;
 
 /**
  * 当有未捕获的异常, 则控制流会流到这里
@@ -21,6 +21,10 @@ class ErrorController extends AbstractController
          * 测试环境显示错误详细信息
          * 生产环境屏蔽详细信息
          */
+
+        NewLog::errorLog(
+            json_encode(['msg' => $exception->getMessage(), 'trace' => $exception->getTraceAsString()], JSON_UNESCAPED_UNICODE)
+        );
 
         if ($exception->getCode() >= 500) {
             // 发送邮件通知或特殊处理
