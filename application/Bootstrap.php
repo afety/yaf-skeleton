@@ -79,12 +79,6 @@ class Bootstrap extends Bootstrap_Abstract
                 $this->addMongodbConnections($capsule, $connection);
             }
         }
-
-        // 设置mongodb数据库支持，如果name是mongodb，交给Jenssegers\Mongodb\Connection来处理
-        $capsule->getDatabaseManager()->extend('mongodb', function ($config) {
-            return new Connection($config);
-        });
-
         // capsule设置为全局对象
         $capsule->setAsGlobal();
 
@@ -118,6 +112,11 @@ class Bootstrap extends Bootstrap_Abstract
     private function addMongodbConnections(Capsule &$capsule, array $connections)
     {
         foreach ($connections as $name => $connection) {
+            // 设置mongodb数据库支持，如果name是mongodb，交给Jenssegers\Mongodb\Connection来处理
+            $capsule->getDatabaseManager()->extend($name, function ($config) {
+                return new Connection($config);
+            });
+            
             $capsule->addConnection([
                 'driver' => 'mongodb',
                 'host' => $connection['host'],
